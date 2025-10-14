@@ -8,8 +8,8 @@ from datetime import datetime, timedelta
 import uvicorn
 import os
 
-from database import get_db, engine
-from models import Base, User, Jornal, Subscription
+from database import get_db, engine, SessionLocal
+from models import Base, User, Jornal, Subscription, UserType
 from schemas import UserCreate, UserLogin, JornalCreate, JornalUpdate, UserUpdate
 from auth import create_access_token, verify_token, get_password_hash, verify_password
 from admin_routes import router as admin_router
@@ -39,6 +39,46 @@ if os.path.exists(UPLOAD_DIR):
     app.mount("/files", StaticFiles(directory=UPLOAD_DIR), name="files")
 
 security = HTTPBearer()
+
+@app.on_event("startup")
+def ensure_default_admin():
+    """Create a default admin user if none exists. Uses env vars for credentials.
+
+    ENV:
+      ADMIN_NAME, ADMIN_PHONE, ADMIN_EMAIL, ADMIN_PASSWORD
+    Defaults are safe for local dev but should be overridden in production.
+    """
+    admin_name = os.getenv("ADMIN_NAME")
+    admin_phone = os.getenv("ADMIN_PHONE")
+    admin_email = os.getenv("ADMIN_EMAIL")
+    admin_password = os.getenv("ADMIN_PASSWORD")
+
+    db = SessionLocal()
+    try:
+        existing_admin = db.query(User).filter(User.tipo_usuario == UserType.ADMIN).first()
+        if existing_admin:
+            return
+
+        # If there's no admin, create one or promote existing email to admin
+        user = db.query(User).filter(User.email == admin_email).first()
+        if user:
+            user.tipo_usuario = UserType.ADMIN
+            # Update password if provided
+            if admin_password:
+                user.senha = get_password_hash(admin_password)
+        else:
+            user = User(
+                nome=admin_name,
+                telefone=admin_phone,
+                email=admin_email,
+                senha=get_password_hash(admin_password),
+                tipo_usuario=UserType.ADMIN,
+                is_active=True,
+            )
+            db.add(user)
+        db.commit()
+    finally:
+        db.close()
 
 @app.get("/")
 async def root():
