@@ -31,12 +31,10 @@ try:
     DB_HOST = parsed.hostname or ""
     if not parsed.scheme or not parsed.hostname or not parsed.path:
         raise ValueError("DATABASE_URL parece estar incompleta")
-    if "railway.internal" in DB_HOST:
-        # This is commonly an internal-only hostname on Railway. It may not resolve if the app
-        # is not attached to the same Railway project or if the addon isn't properly provisioned.
-        logging.info(
-            "DATABASE_URL hostname contains 'railway.internal'. If deployed on Railway, ensure the DB addon is attached to the same project and the environment variable is available to the app."
-        )
+    # No special handling for internal-only Railway hostnames here; DATABASE_URL should be a
+    # valid, reachable Postgres URL (public or internal depending on deployment). Any DNS
+    # resolution/connectivity errors will surface during startup when the app attempts to
+    # connect and will be logged by the retry logic in main.py.
 except Exception as e:
     raise RuntimeError(
         "DATABASE_URL inválida. Verifique a formatação: postgresql://user:pass@host:port/dbname. "

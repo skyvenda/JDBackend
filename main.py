@@ -103,6 +103,20 @@ def ensure_default_admin():
     admin_email = os.getenv("ADMIN_EMAIL")
     admin_password = os.getenv("ADMIN_PASSWORD")
 
+    # Don't attempt to create an admin unless email and password are provided deliberately
+    if not admin_email or not admin_password:
+        logging.info("ADMIN_EMAIL or ADMIN_PASSWORD not provided — skipping automatic admin creation.")
+        return
+
+    # bcrypt has a 72-byte input limit; ensure we don't pass longer passwords to the hasher
+    pw_bytes = admin_password.encode("utf-8")
+    if len(pw_bytes) > 72:
+        logging.warning(
+            "ADMIN_PASSWORD is longer than 72 bytes; truncating to avoid bcrypt errors."
+        )
+        # Truncate bytes to 72 and decode safely; use 'ignore' to avoid partial multibyte errors
+        admin_password = pw_bytes[:72].decode("utf-8", errors="ignore")
+
     db = SessionLocal()
     try:
         existing_admin = db.query(User).filter(User.tipo_usuario == UserType.ADMIN).first()
