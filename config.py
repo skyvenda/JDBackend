@@ -17,7 +17,7 @@ if not DATABASE_URL:
 
 # Configurações de upload
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", "uploads")
-MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE", "10485760"))  # 10MB
+MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE", "40485760"))  # 10MB
 
 # Configurações de dispositivo
 MAX_DEVICES_PER_USER = 2
