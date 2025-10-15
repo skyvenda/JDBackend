@@ -11,9 +11,10 @@ import secrets
 
 from config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, MAX_DEVICES_PER_USER
 
-# Use bcrypt_sha256 first so very long passwords are safe (passlib will hash with sha256 then bcrypt)
-# This avoids the bcrypt 72-byte input limit while remaining compatible with bcrypt hashes.
-pwd_context = CryptContext(schemes=["bcrypt_sha256", "bcrypt"], deprecated="auto")
+# Prefer pbkdf2_sha256 only to avoid importing native bcrypt backend at startup (prevents
+# bcrypt-related initialization errors and the 72-byte limitation). This is secure and
+# avoids native dependency issues in the deployment environment.
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 security = HTTPBearer()
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
