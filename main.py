@@ -16,10 +16,60 @@ from admin_routes import router as admin_router
 from user_routes import router as user_router
 from config import UPLOAD_DIR
 
-# Criar as tabelas
-Base.metadata.create_all(bind=engine)
+import time
+import logging
+from sqlalchemy.exc import OperationalError
+
+
+def create_tables_with_retry(retries: int = 5, base=Base, engine=engine):
+    """Attempt to create DB tables with retries and exponential backoff.
+
+    Raises the last exception if all attempts fail.
+    """
+    delay = 1
+    last_exc = None
+    for attempt in range(1, retries + 1):
+        try:
+            base.metadata.create_all(bind=engine)
+            logging.info("Database tables created (or already exist).")
+            return
+        except Exception as e:
+            last_exc = e
+            logging.error(
+                "Attempt %d/%d: failed to create tables: %s",
+                attempt,
+                retries,
+                str(e),
+            )
+            # If it's an operational error (like DNS failure), wait and retry
+            time.sleep(delay)
+            delay *= 2
+    # all attempts failed
+    logging.critical("Could not create database tables after %d attempts.", retries)
+    # Re-raise the last exception so the platform can surface the failure
+    raise last_exc
 
 app = FastAPI(title="Jornal Destaque API", version="1.0.0")
+
+
+@app.on_event("startup")
+def startup_event():
+    """Ensure DB tables exist on startup. Use retries to tolerate transient DNS/DB startup issues (e.g., Railway)."""
+    try:
+        create_tables_with_retry()
+    except Exception as e:
+        # Log helpful advice for deployment platforms like Railway
+        import sys
+
+        logging.critical(
+            "Failed to initialize database on startup: %s",
+            str(e),
+        )
+        logging.critical(
+            "Check that DATABASE_URL env var is set and that the host is reachable (for Railway, ensure you have the correct DATABASE_URL and the addon/database is running)."
+        )
+        # Re-raise so the process exits with non-zero status and the platform can restart or surface the issue
+        raise
 
 # Configurar CORS
 app.add_middleware(

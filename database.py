@@ -1,20 +1,31 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import OperationalError
+import logging
+
 from config import DATABASE_URL
 
-# Configuração do banco de dados (SQLite ou PostgreSQL via DATABASE_URL)
+
+# Ensure we use SQLAlchemy-friendly scheme (config.py normalizes postgres:// -> postgresql://)
 SQLALCHEMY_DATABASE_URL = DATABASE_URL
 
-engine_kwargs = {}
-if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
-    engine_kwargs["connect_args"] = {"check_same_thread": False}
+# Use pool_pre_ping so SQLAlchemy checks connections before using them (helps with dropped connections)
+engine_kwargs = {
+    "pool_pre_ping": True,
+}
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, **engine_kwargs)
+try:
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, **engine_kwargs)
+except Exception as e:
+    logging.critical("Failed to create SQLAlchemy engine: %s", str(e))
+    # Re-raise to fail fast in deployment; config.py already enforces DATABASE_URL presence
+    raise
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
 
 def get_db():
     db = SessionLocal()
