@@ -7,7 +7,7 @@ from database import get_db
 from models import User, Jornal, Subscription, SubscriptionType, SubscriptionRequest, SubscriptionRequestStatus
 from schemas import (
     UserCreate, UserLogin, UserResponse, JornalResponse, SubscriptionCreate, Token,
-    SubscriptionRequestCreate, SubscriptionRequestResponse
+    SubscriptionRequestCreate, SubscriptionRequestResponse, ChangePasswordRequest
 )
 from auth import (
     authenticate_user, 
@@ -15,6 +15,7 @@ from auth import (
     get_current_user, 
     create_access_token, 
     create_token_session,
+    verify_password,
     timedelta
 )
 from file_handler import get_file_url
@@ -86,6 +87,33 @@ async def login_user(user_credentials: UserLogin, db: Session = Depends(get_db))
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
     """Obtém informações do usuário atual"""
     return current_user
+
+@router.post("/change-password")
+async def change_password(
+    password_data: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Altera a senha do usuário atual"""
+    # Verifica se a senha atual está correta
+    if not verify_password(password_data.senha_atual, current_user.senha):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Senha atual incorreta"
+        )
+    
+    # Valida a nova senha
+    if len(password_data.senha_nova) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A nova senha deve ter pelo menos 6 caracteres"
+        )
+    
+    # Atualiza a senha
+    current_user.senha = get_password_hash(password_data.senha_nova)
+    db.commit()
+    
+    return {"message": "Senha alterada com sucesso"}
 
 @router.get("/jornais", response_model=List[JornalResponse])
 async def list_jornais(

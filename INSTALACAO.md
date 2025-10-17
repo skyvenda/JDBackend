@@ -45,11 +45,11 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ## Primeiros Passos
 
 ### 1. Verificar se a API está funcionando
-Acesse: http://localhost:8000/health
+Acesse: https://jdbackend-production.up.railway.app/health
 
 ### 2. Criar o usuário administrador
 ```bash
-curl -X POST "http://localhost:8000/admin/create-admin" \
+curl -X POST "https://jdbackend-production.up.railway.app/admin/create-admin" \
      -H "Content-Type: application/json" \
      -d '{
        "nome": "Administrador",
@@ -61,7 +61,7 @@ curl -X POST "http://localhost:8000/admin/create-admin" \
 
 ### 3. Fazer login como admin
 ```bash
-curl -X POST "http://localhost:8000/user/login" \
+curl -X POST "https://jdbackend-production.up.railway.app/user/login" \
      -H "Content-Type: application/json" \
      -d '{
        "email": "admin@jornaldestaque.com",
@@ -71,15 +71,15 @@ curl -X POST "http://localhost:8000/user/login" \
 
 ### 4. Usar o token retornado para acessar rotas protegidas
 ```bash
-curl -X GET "http://localhost:8000/admin/jornais" \
+curl -X GET "https://jdbackend-production.up.railway.app/admin/jornais" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
 ## Documentação da API
 
 Após iniciar o servidor, acesse:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
+- **Swagger UI**: https://jdbackend-production.up.railway.app/docs
+- **ReDoc**: https://jdbackend-production.up.railway.app/redoc
 
 ## Testes
 

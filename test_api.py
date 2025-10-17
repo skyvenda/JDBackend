@@ -7,7 +7,7 @@ import json
 from datetime import datetime
 
 # Configurações
-BASE_URL = "http://localhost:8000"
+BASE_URL = "https://jdbackend-production.up.railway.app"
 
 def test_health():
     """Testa se a API está funcionando"""
@@ -123,7 +123,7 @@ def main():
     print("\n" + "=" * 50)
     print("🎉 Todos os testes básicos passaram!")
     print("💡 A API está funcionando corretamente")
-    print("📚 Acesse http://localhost:8000/docs para ver a documentação completa")
+    print("📚 Acesse https://jdbackend-production.up.railway.app/docs para ver a documentação completa")
 
 if __name__ == "__main__":
     main()

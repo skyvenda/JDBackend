@@ -131,7 +131,7 @@ O projeto utiliza SQLite com as seguintes tabelas:
 
 ### Criar Jornal com Upload
 ```bash
-curl -X POST "http://localhost:8000/admin/jornais" \
+curl -X POST "https://jdbackend-production.up.railway.app/admin/jornais" \
      -H "Authorization: Bearer SEU_TOKEN" \
      -F "titulo=Meu Jornal" \
      -F "arquivopdf=@jornal.pdf" \
@@ -140,7 +140,7 @@ curl -X POST "http://localhost:8000/admin/jornais" \
 
 ### Atualizar Jornal
 ```bash
-curl -X PUT "http://localhost:8000/admin/jornais/1" \
+curl -X PUT "https://jdbackend-production.up.railway.app/admin/jornais/1" \
      -H "Authorization: Bearer SEU_TOKEN" \
      -F "titulo=Novo Título" \
      -F "capa=@nova_capa.jpg"

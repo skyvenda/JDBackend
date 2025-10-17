@@ -6,7 +6,7 @@ import requests
 import json
 
 # Configurações
-BASE_URL = "http://localhost:8000"
+BASE_URL = "https://jdbackend-production.up.railway.app"
 
 def login_admin():
     """Faz login como admin"""
@@ -130,7 +130,7 @@ def main():
     
     print("\n" + "=" * 60)
     print("🎉 Exemplo concluído!")
-    print("💡 Verifique a documentação em http://localhost:8000/docs")
+    print("💡 Verifique a documentação em https://jdbackend-production.up.railway.app/docs")
 
 if __name__ == "__main__":
     main()

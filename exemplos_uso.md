@@ -4,7 +4,7 @@
 
 ### Criar Admin
 ```bash
-curl -X POST "http://localhost:8000/admin/create-admin" \
+curl -X POST "https://jdbackend-production.up.railway.app/admin/create-admin" \
      -H "Content-Type: application/json" \
      -d '{
        "nome": "João Silva",
@@ -16,7 +16,7 @@ curl -X POST "http://localhost:8000/admin/create-admin" \
 
 ### Login do Admin
 ```bash
-curl -X POST "http://localhost:8000/user/login" \
+curl -X POST "https://jdbackend-production.up.railway.app/user/login" \
      -H "Content-Type: application/json" \
      -d '{
        "email": "joao@jornaldestaque.com",
@@ -26,7 +26,7 @@ curl -X POST "http://localhost:8000/user/login" \
 
 ### Criar Jornal com Upload de Arquivos (com token)
 ```bash
-curl -X POST "http://localhost:8000/admin/jornais" \
+curl -X POST "https://jdbackend-production.up.railway.app/admin/jornais" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI" \
      -F "titulo=Notícias do Dia" \
      -F "capa=@/caminho/para/capa.jpg" \
@@ -37,13 +37,13 @@ curl -X POST "http://localhost:8000/admin/jornais" \
 
 ### Listar Jornais
 ```bash
-curl -X GET "http://localhost:8000/admin/jornais" \
+curl -X GET "https://jdbackend-production.up.railway.app/admin/jornais" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
 ### Listar Usuários
 ```bash
-curl -X GET "http://localhost:8000/admin/users" \
+curl -X GET "https://jdbackend-production.up.railway.app/admin/users" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
@@ -51,7 +51,7 @@ curl -X GET "http://localhost:8000/admin/users" \
 
 ### Registrar Usuário
 ```bash
-curl -X POST "http://localhost:8000/user/register" \
+curl -X POST "https://jdbackend-production.up.railway.app/user/register" \
      -H "Content-Type: application/json" \
      -d '{
        "nome": "Maria Santos",
@@ -64,7 +64,7 @@ curl -X POST "http://localhost:8000/user/register" \
 
 ### Login do Usuário
 ```bash
-curl -X POST "http://localhost:8000/user/login" \
+curl -X POST "https://jdbackend-production.up.railway.app/user/login" \
      -H "Content-Type: application/json" \
      -d '{
        "email": "maria@email.com",
@@ -74,19 +74,19 @@ curl -X POST "http://localhost:8000/user/login" \
 
 ### Ver Jornais Disponíveis
 ```bash
-curl -X GET "http://localhost:8000/user/jornais" \
+curl -X GET "https://jdbackend-production.up.railway.app/user/jornais" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
 ### Filtrar Jornais por Data
 ```bash
-curl -X GET "http://localhost:8000/user/jornais?data_inicio=2024-01-01&data_fim=2024-01-31" \
+curl -X GET "https://jdbackend-production.up.railway.app/user/jornais?data_inicio=2024-01-01&data_fim=2024-01-31" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
 ### Criar Assinatura Digital
 ```bash
-curl -X POST "http://localhost:8000/user/subscriptions" \
+curl -X POST "https://jdbackend-production.up.railway.app/user/subscriptions" \
      -H "Content-Type: application/json" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI" \
      -d '{
@@ -97,7 +97,7 @@ curl -X POST "http://localhost:8000/user/subscriptions" \
 
 ### Ver Minhas Assinaturas
 ```bash
-curl -X GET "http://localhost:8000/user/my-subscriptions" \
+curl -X GET "https://jdbackend-production.up.railway.app/user/my-subscriptions" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
@@ -105,7 +105,7 @@ curl -X GET "http://localhost:8000/user/my-subscriptions" \
 
 ### Dar Acesso Físico a Usuário
 ```bash
-curl -X POST "http://localhost:8000/admin/subscriptions" \
+curl -X POST "https://jdbackend-production.up.railway.app/admin/subscriptions" \
      -H "Content-Type: application/json" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI" \
      -d '{
@@ -117,7 +117,7 @@ curl -X POST "http://localhost:8000/admin/subscriptions" \
 
 ### Editar Usuário
 ```bash
-curl -X PUT "http://localhost:8000/admin/users/2" \
+curl -X PUT "https://jdbackend-production.up.railway.app/admin/users/2" \
      -H "Content-Type: application/json" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI" \
      -d '{
@@ -128,7 +128,7 @@ curl -X PUT "http://localhost:8000/admin/users/2" \
 
 ### Editar Jornal com Upload de Arquivos
 ```bash
-curl -X PUT "http://localhost:8000/admin/jornais/1" \
+curl -X PUT "https://jdbackend-production.up.railway.app/admin/jornais/1" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI" \
      -F "titulo=Notícias Atualizadas" \
      -F "capa=@/caminho/para/nova-capa.jpg"
@@ -138,13 +138,13 @@ curl -X PUT "http://localhost:8000/admin/jornais/1" \
 
 ### Desativar Usuário
 ```bash
-curl -X DELETE "http://localhost:8000/admin/users/2" \
+curl -X DELETE "https://jdbackend-production.up.railway.app/admin/users/2" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
 ### Desativar Jornal
 ```bash
-curl -X DELETE "http://localhost:8000/admin/jornais/1" \
+curl -X DELETE "https://jdbackend-production.up.railway.app/admin/jornais/1" \
      -H "Authorization: Bearer SEU_TOKEN_AQUI"
 ```
 
@@ -248,7 +248,7 @@ headers = {
 }
 
 response = requests.post(
-    "http://localhost:8000/admin/jornais",
+     "https://jdbackend-production.up.railway.app/admin/jornais",
     data=data,
     files=files,
     headers=headers
@@ -257,8 +257,8 @@ response = requests.post(
 
 ### URLs de Acesso aos Arquivos
 Após o upload, os arquivos ficam disponíveis em:
-- `http://localhost:8000/files/covers/nome_do_arquivo.jpg`
-- `http://localhost:8000/files/pdfs/nome_do_arquivo.pdf`
+- `https://jdbackend-production.up.railway.app/files/covers/nome_do_arquivo.jpg`
+- `https://jdbackend-production.up.railway.app/files/pdfs/nome_do_arquivo.pdf`
 
 ## 8. Observações Importantes
 

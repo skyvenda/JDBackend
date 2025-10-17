@@ -108,19 +108,19 @@ def delete_file(file_path: str) -> bool:
     except Exception:
         return False
 
-def get_file_url(file_path: str, base_url: str = "http://localhost:8000") -> str:
+def get_file_url(file_path: str, base_url: str = "https://jdbackend-production.up.railway.app") -> str:
     """
     Gera URL completa para acessar o arquivo
-    
+
     Args:
         file_path: Caminho relativo do arquivo
         base_url: URL base da API
-    
+
     Returns:
         str: URL completa do arquivo
     """
     if not file_path:
-        return None
+        return ""
     # Normaliza separadores para URL
     normalized_path = file_path.replace('\\', '/')
     return f"{base_url}/files/{normalized_path}"

@@ -25,6 +25,10 @@ class UserUpdate(BaseModel):
     tipo_subscricao: Optional[SubscriptionType] = None
     is_active: Optional[bool] = None
 
+class ChangePasswordRequest(BaseModel):
+    senha_atual: str
+    senha_nova: str
+
 class UserResponse(UserBase):
     id: int
     tipo_subscricao: Optional[SubscriptionType]
