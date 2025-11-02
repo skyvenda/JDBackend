@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 
 load_dotenv()
-
+ 
 # Configurações de segurança
 SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-change-in-production")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
@@ -47,3 +47,4 @@ MAX_FILE_SIZE = int(os.getenv("MAX_FILE_SIZE", "40485760"))  # 10MB
 
 # Configurações de dispositivo
 MAX_DEVICES_PER_USER = 2
+
