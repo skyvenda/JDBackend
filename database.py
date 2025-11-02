@@ -8,7 +8,7 @@ from config import DATABASE_URL
 
 
 # Ensure we use SQLAlchemy-friendly scheme (config.py normalizes postgres:// -> postgresql://)
-SQLALCHEMY_DATABASE_URL = "postgres://x2pypKr81B0c:vCyJUsHVYeHhfWHCsf692YnrTTTEldZIIDaBmWYX8lbwz28wwsHR2eGFpH9lHoO8e8cdOnHwU17A4YM3CIjN@o-destaque-y7cj-e81e00bf.app.indiecloud.dev/production"
+SQLALCHEMY_DATABASE_URL =DATABASE_URL
 
 # Use pool_pre_ping so SQLAlchemy checks connections before using them (helps with dropped connections)
 engine_kwargs = {
@@ -33,4 +33,5 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
